@@ -138,6 +138,21 @@ def signout():
     session.clear()
     return redirect(url_for("index"))
 
+#관리자용 성적 조회
+@app.route("/score_list")
+def score_list():
+    #관리자가 아니라면 돌려보냄
+    if session.get("role") != "admin":
+        return ren("index.html", err="잘못된 접근입니다", sno = session.get("sno"), sname=session.get("sname"), role=session.get("role"))
+    
+    conn, cur = conn_db()
+    
+    cur.execute("select * from scores")
+    rows = cur.fetchall()
+    
+    conn.close()
+    return ren("score_list.html", rows=rows, sno = session.get("sno"), sname=session.get("sname"), role=session.get("role"))
+
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)
