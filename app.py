@@ -153,6 +153,46 @@ def score_list():
     conn.close()
     return ren("score_list.html", rows=rows, sno = session.get("sno"), sname=session.get("sname"), role=session.get("role"))
 
+@app.route("/insert_score",methods=['GET','POST'])
+def insert_score():
+    #성적 삽입 요청
+    if request.method=="POST":
+        sno = request.form["sno"]
+        kor = int(request.form["kor"])
+        eng = int(request.form["eng"])
+        mat = int(request.form["mat"])
+        tot, avg, grade = calculate(kor, eng, mat)
+        
+        conn, cur = conn_db()
+        cur.execute("""insert into scores(sno, kor, eng, mat, tot, average, grade) 
+                    values(:1, :2, :3, :4, :5, :6, :7)""",
+                    (sno, kor, eng, mat, tot, avg, grade))
+        conn.commit()
+        conn.close()
+        
+        return ren("insert_score.html", noti="성적이 입력되었습니다.", sno=session.get("sno"), role=session.get("role"))
+    #삽입 폼 이동
+    if session.get("role") != "admin":#관리자가 아닌 사람이 성적 입력을 시도할 시
+        return ren("index.html", err="잘못된 접근입니다", sno = session.get("sno"), sname=session.get("sname"), role=session.get("role"))
+    #관리자라면
+    return ren("insert_score.html", sno = session.get("sno"), role=session.get("role"))
+
+def calculate(kor, eng, mat):
+    tot = kor+eng+mat
+    avg = round(tot/3,2)
+    match int(avg//10):
+        case 10|9:
+            grade = "A"
+        case 8:
+            grade = "B"
+        case 7:
+            grade = "C"
+        case 6:
+            grade = "D"
+        case _:
+            grade = "F"
+    return tot, avg, grade
+
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+성적 입력하기
+{% endblock %}
+
+{% block content %}
+
+<h2>성적 입력하기</h2>
+<form method="post" action="{{url_for('insert_score')}}">
+    학번: <input type="text" name="sno"><br>
+    국어: <input type="text" name="kor"><br>
+    영어: <input type="text" name="eng"><br>
+    수학: <input type="text" name="mat"><br>
+    <button type="submit">입력</button>
+</form>
+
+{% if noti %}
+<p class="noti">{{noti}} <a href="{{url_for('score_list')}}">리스트 이동하기</a></p>
+{% endif %}
+
+{% endblock %}
