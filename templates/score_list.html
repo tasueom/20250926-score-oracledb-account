@@ -32,7 +32,7 @@
         <td>{{row[7]}}</td>
         <td>{{row[8]}}</td>
         <td>
-            관리
+            <a href="{{url_for('update_score', sno=row[0])}}">수정</a>
         </td>
     </tr>
     {% endfor %}

@@ -197,6 +197,39 @@ def insert_score():
     #성적 미입력 학번을 같이 넘겨 성적 입력 폼에서 select로 사용할 수 있게 함
     return ren("insert_score.html", snos=snos, sno = session.get("sno"), role=session.get("role"))
 
+@app.route("/update_score/<sno>",methods=['GET','POST'])
+def update_score(sno):
+    #성적 수정 요청
+    if request.method=="POST":
+        kor = int(request.form["kor"])
+        eng = int(request.form["eng"])
+        mat = int(request.form["mat"])
+        tot, avg, grade = calculate(kor, eng, mat)
+        
+        conn, cur = conn_db()
+        cur.execute("""
+                    update scores set
+                    kor = :1,
+                    eng = :2,
+                    mat = :3,
+                    tot = :4,
+                    average = :5,
+                    grade = :6
+                    where sno = :7
+                    """,
+                    (kor, eng, mat, tot, avg, grade, sno))
+        conn.commit()
+        conn.close()
+        
+        return redirect(url_for("score_list"))
+    #수정 폼 이동 요청
+    conn, cur = conn_db()
+    cur.execute("select * from scores where sno=:1",(sno,))
+    score = cur.fetchone()
+    conn.close()
+    
+    return ren("update_score.html", score=score, sno = session.get("sno"), role=session.get("role"))
+
 def calculate(kor, eng, mat):
     tot = kor+eng+mat
     avg = round(tot/3,2)
