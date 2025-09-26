@@ -192,9 +192,19 @@ def insert_score():
                     values(:1, :2, :3, :4, :5, :6, :7)""",
                     (sno, kor, eng, mat, tot, avg, grade))
         conn.commit()
+        
+        #students 테이블에는 존재하지만 scores 테이블에 성적이 입력되지 않은 학번만 선택
+        cur.execute("""
+                    select sno from students
+                    where sno != 'admin'
+                    minus
+                    select sno from scores
+                    order by sno
+                    """)
+        snos = cur.fetchall()
         conn.close()
         
-        return ren("insert_score.html", noti="성적이 입력되었습니다.", sno=session.get("sno"), role=session.get("role"))
+        return ren("insert_score.html", noti="성적이 입력되었습니다.", snos=snos, sno=session.get("sno"), role=session.get("role"))
     #삽입 폼 이동
     if session.get("role") != "admin":#관리자가 아닌 사람이 성적 입력을 시도할 시
         return ren("index.html", err="잘못된 접근입니다", sno = session.get("sno"), sname=session.get("sname"), role=session.get("role"))
