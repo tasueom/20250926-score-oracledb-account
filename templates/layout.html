@@ -13,6 +13,8 @@
         {% if role=="admin" %}
         <a href="{{url_for('score_list')}}">성적 목록 조회</a>
         <a href="{{url_for('insert_score')}}">성적 입력</a>
+        {% elif role=="student" %}
+        <a href="{{url_for('my_score')}}">내 성적 확인</a>
         {% endif %}
 
         {% if not sno %}

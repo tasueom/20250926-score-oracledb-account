@@ -138,6 +138,24 @@ def signout():
     session.clear()
     return redirect(url_for("index"))
 
+#학생 계정용 본인 성적 조회
+@app.route("/my_score")
+def my_score():
+    sno = session.get("sno")
+    
+    conn, cur = conn_db()
+    cur.execute("""
+                select s.sno, s.ban, s.sname, c.kor, c.eng, c.mat, c.tot, c.average, c.grade
+                from scores c
+                join students s on s.sno=c.sno
+                where sno=:1
+                """,(sno,))
+    score = cur.fetchone()
+    
+    conn.close()
+    
+    return ren("my_score.html", score=score, sno = session.get("sno"), role=session.get("role"))
+
 #관리자용 성적 조회
 @app.route("/score_list")
 def score_list():

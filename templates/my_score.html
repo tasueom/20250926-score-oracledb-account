@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+내 성적 확인
+{% endblock %}
+
+{% block content %}
+
+<h2>성적 수정하기</h2>
+<form method="post" action="{{url_for('update_score',sno=score[0])}}">
+    학번: <input type="text" name="sno" value="{{score[0]}}" readonly><br>
+    반: <input type="text" name="ban" value="{{score[1]}}" readonly><br>
+    이름: <input type="text" name="sname" value="{{score[2]}}" readonly><br>
+    국어: <input type="text" name="kor" value="{{score[3]}}"><br>
+    영어: <input type="text" name="eng" value="{{score[4]}}"><br>
+    수학: <input type="text" name="mat" value="{{score[5]}}"><br>
+    총점: <input type="text" name="tot" value="{{score[6]}}" readonly><br>
+    평균: <input type="text" name="avg" value="{{score[7]}}" readonly><br>
+    학점: <input type="text" name="mat" value="{{score[8]}}" readonly><br>
+    <button type="submit">수정</button>
+</form>
+
+{% endblock %}
