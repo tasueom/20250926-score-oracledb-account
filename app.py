@@ -147,6 +147,7 @@ def score_list():
     
     conn, cur = conn_db()
     
+    #JOIN을 이용하여 학번, 반, 이름, 성적 선택
     cur.execute("""
                 select s.sno, s.ban, s.sname, c.kor, c.eng, c.mat, c.tot, c.average, c.grade
                 from scores c
@@ -182,6 +183,7 @@ def insert_score():
     #관리자라면
     conn, cur = conn_db()
     
+    #students 테이블에는 존재하지만 scores 테이블에 성적이 입력되지 않은 학번만 선택
     cur.execute("""
                 select sno from students
                 where sno != 'admin'
@@ -192,6 +194,7 @@ def insert_score():
     snos = cur.fetchall()
     conn.close()
     
+    #성적 미입력 학번을 같이 넘겨 성적 입력 폼에서 select로 사용할 수 있게 함
     return ren("insert_score.html", snos=snos, sno = session.get("sno"), role=session.get("role"))
 
 def calculate(kor, eng, mat):
