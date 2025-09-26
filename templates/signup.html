@@ -21,6 +21,9 @@
     비밀번호: <input type="password" name="password"><br>
     비밀번호 확인: <input type="password" name="password_check"><br>
     <button type="submit">가입</button>
+    {% if err %}
+    <p class="err">{{err}}</p>
+    {% endif %}
 </form>
 
 {% endblock %}
