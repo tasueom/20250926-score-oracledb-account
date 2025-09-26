@@ -133,6 +133,11 @@ def signin():
     #로그인 페이지 이동 요청
     return ren("signin.html")
 
+@app.route("/signout")
+def signout():
+    session.clear()
+    return redirect(url_for("index"))
+
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)
