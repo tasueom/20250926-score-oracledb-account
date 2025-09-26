@@ -9,9 +9,13 @@
     <div class="navigation">
         <h2>성적 관리 프로그램</h2>
         <a href="{{url_for('index')}}">메인으로</a>
+
+        {% if not sno %}
         <a href="{{url_for('signup')}}">회원가입</a>
         <a href="{{url_for('signin')}}">로그인</a>
+        {% else %}
         <a href="{{url_for('signout')}}">로그아웃</a>
+        {% endif %}
     </div>
     <div class="container">
         {% block content %}{% endblock %}
