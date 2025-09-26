@@ -101,6 +101,38 @@ def signup():
     
     return ren("signup.html")
 
+#로그인
+@app.route("/signin", methods=['GET','POST'])
+def signin():
+    #로그인 요청 받음
+    if request.method=="POST":
+        sno = request.form["sno"]
+        password = request.form["password"]
+        hashed_pw = hashlib.sha256(password.encode()).hexdigest()
+        
+        conn, cur = conn_db()
+        #학번에 알맞는 비밀번호를 입력했는지 확인
+        cur.execute("select sno, sname, role from students where sno=:1 and password=:2",
+                    (sno, hashed_pw))
+        student = cur.fetchone()
+        conn.close()
+        
+        #로그인에 성공했다면
+        if student:
+            #세션에 학생 정보 등록
+            session["sno"] = student[0]
+            session["sname"] = student[1]
+            session["role"] = student[2]
+            
+            #메인 페이지로 이동
+            return redirect(url_for("index"))
+        #로그인 실패 시
+        else:
+            return ren("signin.html", err="로그인 실패. 학번 혹은 비밀번호를 확인하세요.")
+    
+    #로그인 페이지 이동 요청
+    return ren("signin.html")
+
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)
