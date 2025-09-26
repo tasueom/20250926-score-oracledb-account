@@ -1,5 +1,6 @@
 import oracledb
 from flask import Flask, render_template as ren, request, redirect, url_for, session
+import hashlib
 
 oracledb.init_oracle_client(
     lib_dir=r"C:\oraclexe\instantclient-basic-windows.x64-23.9.0.25.07\instantclient_23_9"
@@ -51,6 +52,18 @@ def init_db():
                         constraint fk_scores_sno foreign key (sno) references students(sno)
                     )
                     """)
+        
+        conn.commit()
+    except:
+        pass
+    #관리자 계정 생성
+    try:
+        cur.execute("""
+                    insert into students(sno, sname, ban, password, role) values(
+                        'admin', 'admin', 0, :1, 'admin'
+                    )
+                    """, (hashlib.sha256("1234".encode()).hexdigest(),)
+                    )
         
         conn.commit()
     except:
