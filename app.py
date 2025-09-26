@@ -26,7 +26,7 @@ def init_db():
         #회원 테이블 생성
         cur.execute("""
                     create table students (
-                        sno number primary key,
+                        sno varchar2(20) primary key,
                         ban number(1) not null,
                         sname varchar2(40) not null,
                         password varchar2(200),
@@ -41,7 +41,7 @@ def init_db():
         #성적 테이블 생성
         cur.execute("""
                     create table scores (
-                        sno number primary key,
+                        sno varchar2(20) primary key,
                         kor number(3) not null,
                         eng number(3) not null,
                         mat number(3) not null,
