@@ -33,7 +33,11 @@ def init_db():
                         role varchar2(20) not null
                     )
                     """)
+        conn.commit()
+    except:
+        pass
         
+    try:
         #성적 테이블 생성
         cur.execute("""
                     create table scores (
@@ -43,15 +47,16 @@ def init_db():
                         mat number(3) not null,
                         tot number(3),
                         average number(5,2),
-                        grade char(1)
+                        grade char(1),
                         constraint fk_scores_sno foreign key (sno) references students(sno)
                     )
                     """)
         
         conn.commit()
-        conn.close()
     except:
         pass
+    finally:
+        conn.close()
 
 if __name__ == "__main__":
     init_db()
