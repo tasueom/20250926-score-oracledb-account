@@ -71,6 +71,10 @@ def init_db():
     finally:
         conn.close()
 
+@app.route("/")
+def index():
+    return ren("index.html")
+
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)
