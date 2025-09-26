@@ -147,7 +147,12 @@ def score_list():
     
     conn, cur = conn_db()
     
-    cur.execute("select * from scores")
+    cur.execute("""
+                select s.sno, s.ban, s.sname, c.kor, c.eng, c.mat, c.tot, c.average, c.grade
+                from scores c
+                join students s on s.sno=c.sno
+                order by sno asc
+                """)
     rows = cur.fetchall()
     
     conn.close()
