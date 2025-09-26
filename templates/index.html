@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+성적 관리 프로그램
+{% endblock %}
+
+{% block content %}
+
+{% if sname %}
+{{sname}}님 환영합니다
+{% else %}
+로그인 후 이용해주세요
+{% endif %}
+
+{% endblock %}

@@ -7,6 +7,7 @@ oracledb.init_oracle_client(
 )
 
 app = Flask(__name__)
+app.secret_key = "secret_key_123"
 
 #오라클 DB 연결
 def conn_db():
@@ -73,7 +74,32 @@ def init_db():
 
 @app.route("/")
 def index():
-    return ren("index.html")
+    return ren("index.html", sno = session.get("sno"), sname=session.get("sname"), role=session.get("role"))
+
+#회원가입
+@app.route("/signup", methods=['GET','POST'])
+def signup():
+    if request.method=="POST":
+        sno = request.form["sno"]
+        ban = request.form["ban"]
+        sname = request.form["sname"]
+        password = request.form["password"]
+        hashed_pw = hashlib.sha256(password.encode()).hexdigest()
+        
+        try:
+            conn, cur = conn_db()
+            cur.execute("""
+                        insert into students(sno, ban, sname, password, role) 
+                        values(:1, :2, :3, :4, 'student')
+                        """,(sno, ban, sname, hashed_pw))
+            conn.commit()
+        except oracledb.IntegrityError:
+            conn.close()
+            return ren("signup.html", err = "이미 존재하는 학번입니다.")
+        conn.close()
+        return redirect(url_for("signin"))
+    
+    return ren("signup.html")
 
 if __name__ == "__main__":
     init_db()
