@@ -175,7 +175,19 @@ def insert_score():
     if session.get("role") != "admin":#관리자가 아닌 사람이 성적 입력을 시도할 시
         return ren("index.html", err="잘못된 접근입니다", sno = session.get("sno"), sname=session.get("sname"), role=session.get("role"))
     #관리자라면
-    return ren("insert_score.html", sno = session.get("sno"), role=session.get("role"))
+    conn, cur = conn_db()
+    
+    cur.execute("""
+                select sno from students
+                where sno != 'admin'
+                minus
+                select sno from scores
+                order by sno
+                """)
+    snos = cur.fetchall()
+    conn.close()
+    
+    return ren("insert_score.html", snos=snos, sno = session.get("sno"), role=session.get("role"))
 
 def calculate(kor, eng, mat):
     tot = kor+eng+mat
