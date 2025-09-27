@@ -148,7 +148,7 @@ def my_score():
                 select s.sno, s.ban, s.sname, c.kor, c.eng, c.mat, c.tot, c.average, c.grade
                 from scores c
                 join students s on s.sno=c.sno
-                where sno=:1
+                where s.sno=:1
                 """,(sno,))
     score = cur.fetchone()
     
@@ -247,9 +247,22 @@ def update_score(sno):
                     """,
                     (kor, eng, mat, tot, avg, grade, sno))
         conn.commit()
-        conn.close()
         
-        return redirect(url_for("score_list"))
+        #누구의 수정 요청인지에 따라 돌아가는 페이지 분기
+        if session.get("role")=="admin":
+            conn.close()
+            return redirect(url_for("score_list"))
+        else:
+            cur.execute("""
+                select s.sno, s.ban, s.sname, c.kor, c.eng, c.mat, c.tot, c.average, c.grade
+                from scores c
+                join students s on s.sno=c.sno
+                where s.sno=:1
+                """,(sno,))
+            score = cur.fetchone()
+    
+            conn.close()
+            return ren("my_score.html", noti="성적이 수정되었습니다", score=score, sno = session.get("sno"), sname=session.get("sname"), role=session.get("role"))
     #수정 폼 이동 요청
     conn, cur = conn_db()
     cur.execute("select * from scores where sno=:1",(sno,))
