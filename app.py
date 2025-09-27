@@ -170,7 +170,7 @@ def score_list():
                 select s.sno, s.ban, s.sname, c.kor, c.eng, c.mat, c.tot, c.average, c.grade
                 from scores c
                 join students s on s.sno=c.sno
-                order by sno asc
+                order by s.sno asc
                 """)
     rows = cur.fetchall()
     
@@ -193,7 +193,7 @@ def score_list_ban():
                 select s.sno, s.ban, s.sname, c.kor, c.eng, c.mat, c.tot, c.average, c.grade
                 from scores c
                 join students s on s.sno=c.sno
-                where ban = :1
+                where s.ban = :1
                 order by s.sno asc
                 """,(ban,))
     rows = cur.fetchall()
