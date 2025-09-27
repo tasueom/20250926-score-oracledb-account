@@ -11,15 +11,15 @@
     학번: <input type="text" name="sno"><br>
     반: 
     <select name="ban">
-        <option value="1">1</option>
+        <option value="1" selected>1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
         <option value="5">5</option>
     </select><br>
-    이름: <input type="text" name="sname"><br>
-    비밀번호: <input type="password" name="password"><br>
-    비밀번호 확인: <input type="password" name="password_check"><br>
+    이름: <input type="text" name="sname" required><br>
+    비밀번호: <input type="password" name="password" required><br>
+    비밀번호 확인: <input type="password" name="password_check" required><br>
     <button type="submit">가입</button>
     {% if err %}
     <p class="err">{{err}}</p>
