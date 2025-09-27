@@ -7,7 +7,7 @@
 {% block content %}
 
 <h2>회원가입</h2>
-<form method="post" action="{{url_for('signup')}}">
+<form method="post" action="{{url_for('signup')}}" onsubmit="return checkStudent(this)">
     학번: <input type="text" name="sno" required><br>
     반: 
     <select name="ban">
