@@ -177,6 +177,44 @@ def score_list():
     conn.close()
     return ren("score_list.html", rows=rows, sno = session.get("sno"), sname=session.get("sname"), role=session.get("role"))
 
+@app.route("/score_list_ban")
+def score_list_ban():
+    #관리자가 아니라면 돌려보냄
+    if session.get("role") != "admin":
+        return ren("index.html", err="잘못된 접근입니다", sno = session.get("sno"), sname=session.get("sname"), role=session.get("role"))
+    
+    #조회할 반 받아오기
+    ban = request.args.get("ban") or "1"
+    
+    conn, cur = conn_db()
+    
+    #JOIN을 이용하여 특정 반 학생들의 학번, 반, 이름, 성적 선택
+    cur.execute("""
+                select s.sno, s.ban, s.sname, c.kor, c.eng, c.mat, c.tot, c.average, c.grade
+                from scores c
+                join students s on s.sno=c.sno
+                where ban = :1
+                order by s.sno asc
+                """,(ban,))
+    rows = cur.fetchall()
+    
+    #선택한 반의 통계 선택
+    cur.execute("""
+                select
+                s.ban,
+                round(avg(c.average), 2) as avg_average,
+                max(c.average)           as max_average,
+                min(c.average)           as min_average
+                from students s
+                join scores   c on c.sno = s.sno
+                where s.ban = :1
+                group by s.ban
+                """, (ban,))
+    stats = cur.fetchone()
+    
+    conn.close()
+    return ren("score_list_ban.html", ban=ban, rows=rows, stats=stats, sno = session.get("sno"), sname=session.get("sname"), role=session.get("role"))
+
 @app.route("/insert_score",methods=['GET','POST'])
 def insert_score():
     #성적 삽입 요청

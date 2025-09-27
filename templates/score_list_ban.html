@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block title %}
+반별 성적 조회
+{% endblock %}
+
+{% block content %}
+
+<h2>반별 성적 조회</h2>
+<form action="{{url_for('score_list_ban')}}">
+    반: 
+    <select name="ban">
+        <option value="1" {% if ban == "1" %}selected{% endif %}>1</option>
+        <option value="2" {% if ban == "2" %}selected{% endif %}>2</option>
+        <option value="3" {% if ban == "3" %}selected{% endif %}>3</option>
+        <option value="4" {% if ban == "4" %}selected{% endif %}>4</option>
+        <option value="5" {% if ban == "5" %}selected{% endif %}>5</option>
+    </select>
+    <button type="submit">조회</button>
+</form>
+{% if rows %}
+<table>
+    <tr>
+        <th>학번</th>
+        <th>반</th>
+        <th>이름</th>
+        <th>국어</th>
+        <th>영어</th>
+        <th>수학</th>
+        <th>총점</th>
+        <th>평균</th>
+        <th>학점</th>
+        <th>관리</th>
+    </tr>
+    {% for row in rows %}
+    <tr>
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}}</td>
+        <td>{{row[2]}}</td>
+        <td>{{row[3]}}</td>
+        <td>{{row[4]}}</td>
+        <td>{{row[5]}}</td>
+        <td>{{row[6]}}</td>
+        <td>{{row[7]}}</td>
+        <td>{{row[8]}}</td>
+        <td>
+            <a href="{{url_for('update_score', sno=row[0])}}">수정</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p class="noti">{{ban}}반의 성적 정보가 없습니다.</p>
+{% endif %}
+<h3>{{ban}}반 통계</h3>
+{% if stats %}
+<table class="stats">
+    <tr>
+        <th>평균 점수</th>
+        <th>최고 점수</th>
+        <th>최저 점수</th>
+    </tr>
+    <tr>
+        <td>{{stats[1]}}</td>
+        <td>{{stats[2]}}</td>
+        <td>{{stats[3]}}</td>
+    </tr>
+</table>
+{% else %}
+<p class="noti">{{ban}}반의 성적 통계가 없습니다.</p>
+{% endif %}
+
+{% endblock %}
