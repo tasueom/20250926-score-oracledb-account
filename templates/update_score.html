@@ -7,11 +7,11 @@
 {% block content %}
 
 <h2>성적 수정하기</h2>
-<form method="post" action="{{url_for('update_score',sno=score[0])}}">
+<form method="post" action="{{url_for('update_score',sno=score[0])}}" onsubmit="return checkScore(this)">
     학번: <input type="text" name="sno" value="{{score[0]}}" readonly><br>
-    국어: <input type="text" name="kor" value="{{score[1]}}"><br>
-    영어: <input type="text" name="eng" value="{{score[2]}}"><br>
-    수학: <input type="text" name="mat" value="{{score[3]}}"><br>
+    국어: <input type="text" name="kor" value="{{score[1]}}" required><br>
+    영어: <input type="text" name="eng" value="{{score[2]}}" required><br>
+    수학: <input type="text" name="mat" value="{{score[3]}}" required><br>
     총점: <input type="text" name="tot" value="{{score[4]}}" readonly><br>
     평균: <input type="text" name="avg" value="{{score[5]}}" readonly><br>
     학점: <input type="text" name="grade" value="{{score[6]}}" readonly><br>

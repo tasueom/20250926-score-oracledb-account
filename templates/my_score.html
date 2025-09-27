@@ -8,13 +8,13 @@
 
 <h2>내 성적 확인</h2>
 {% if score %}
-<form method="post" action="{{url_for('update_score',sno=score[0])}}">
+<form method="post" action="{{url_for('update_score',sno=score[0])}}" onsubmit="return checkScore(this)">
     학번: {{score[0]}}<br>
     반: {{score[1]}}<br>
     이름: {{score[2]}}<br>
-    국어: <input type="text" name="kor" value="{{score[3]}}"><br>
-    영어: <input type="text" name="eng" value="{{score[4]}}"><br>
-    수학: <input type="text" name="mat" value="{{score[5]}}"><br>
+    국어: <input type="text" name="kor" value="{{score[3]}}" required><br>
+    영어: <input type="text" name="eng" value="{{score[4]}}" required><br>
+    수학: <input type="text" name="mat" value="{{score[5]}}" required><br>
     총점: <input type="text" name="tot" value="{{score[6]}}" readonly><br>
     평균: <input type="text" name="avg" value="{{score[7]}}" readonly><br>
     학점: <input type="text" name="grade" value="{{score[8]}}" readonly><br>
@@ -25,12 +25,12 @@
 </form>
 {% else %}
 <p class="noti">입력된 내 성적이 없습니다. 성적을 입력합니다.</p>
-<form method="post" action="{{url_for('insert_score')}}">
+<form method="post" action="{{url_for('insert_score')}}" onsubmit="return checkScore(this)">
     <!-- 학번은 자동입력 -->
     <input type="hidden" name="sno" value="{{sno}}"><br>
-    국어: <input type="text" name="kor"><br>
-    영어: <input type="text" name="eng"><br>
-    수학: <input type="text" name="mat"><br>
+    국어: <input type="text" name="kor" required><br>
+    영어: <input type="text" name="eng" required><br>
+    수학: <input type="text" name="mat" required><br>
     <button type="submit">입력</button>
 </form>
 {% endif %}

@@ -8,16 +8,16 @@
 
 {% if snos %}
 <h2>성적 입력하기</h2>
-<form method="post" action="{{url_for('insert_score')}}">
+<form method="post" action="{{url_for('insert_score')}}" onsubmit="return checkScore(this)">
     학번: 
     <select name="sno">
         {% for sno in snos %}
         <option value="{{sno[0]}}">{{sno[0]}}</option>
         {% endfor %}
     </select><br>
-    국어: <input type="text" name="kor"><br>
-    영어: <input type="text" name="eng"><br>
-    수학: <input type="text" name="mat"><br>
+    국어: <input type="text" name="kor" required><br>
+    영어: <input type="text" name="eng" required><br>
+    수학: <input type="text" name="mat" required><br>
     <button type="submit">입력</button>
 </form>
 {% else %}

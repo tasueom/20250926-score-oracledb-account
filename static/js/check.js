@@ -21,3 +21,22 @@ function checkStudent(f){
     }
     return true;
 }
+
+function checkScore(f){
+    const subjects = ["kor","eng","mat"];
+    for(let sub of subjects){
+        const v = f[sub].value.trim();
+        if(!/^\d+$/.test(v)){
+            alert(sub + " 점수는 숫자만 입력해주세요.");
+            f[sub].focus();
+            return false;
+        }
+        const num = parseInt(v,10);
+        if(num < 0 || num > 100){
+            alert(sub + " 점수는 0부터 100 사이여야 합니다.");
+            f[sub].focus();
+            return false;
+        }
+    }
+    return true;
+}
