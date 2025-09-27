@@ -193,6 +193,20 @@ def insert_score():
                     (sno, kor, eng, mat, tot, avg, grade))
         conn.commit()
         
+        #학생이 입력한것이라면
+        if session.get("role") == "student":
+            cur.execute("""
+                select s.sno, s.ban, s.sname, c.kor, c.eng, c.mat, c.tot, c.average, c.grade
+                from scores c
+                join students s on s.sno=c.sno
+                where s.sno=:1
+                """,(sno,))
+            score = cur.fetchone()
+    
+            conn.close()
+    
+            return ren("my_score.html", score=score, sno = session.get("sno"), role=session.get("role"))
+        #관리자라면
         #students 테이블에는 존재하지만 scores 테이블에 성적이 입력되지 않은 학번만 선택
         cur.execute("""
                     select sno from students

@@ -6,7 +6,8 @@
 
 {% block content %}
 
-<h2>성적 수정하기</h2>
+<h2>내 성적 확인</h2>
+{% if score %}
 <form method="post" action="{{url_for('update_score',sno=score[0])}}">
     학번: {{score[0]}}<br>
     반: {{score[1]}}<br>
@@ -22,5 +23,16 @@
         <p class="noti">{{noti}}</p>
     {% endif %}
 </form>
+{% else %}
+<p class="noti">입력된 내 성적이 없습니다. 성적을 입력합니다.</p>
+<form method="post" action="{{url_for('insert_score')}}">
+    <!-- 학번은 자동입력 -->
+    <input type="hidden" name="sno" value="{{sno}}"><br>
+    국어: <input type="text" name="kor"><br>
+    영어: <input type="text" name="eng"><br>
+    수학: <input type="text" name="mat"><br>
+    <button type="submit">입력</button>
+</form>
+{% endif %}
 
 {% endblock %}
